@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In Page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url("https://repository-images.githubusercontent.com/299409710/b42f7780-0fe1-11eb-8460-e459acd20fb4") center/cover no-repeat;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 40px;
+      border-radius: 10px; /* Soft corners */
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="submit"] {
+      width: 260px;
+      height: 45px;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+      background-color: red;
+      width: 274px;
+      height: 40px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .sign-in-text {
+      color: white;
+      font-size: 30px;
+      font-weight: bold; 
+      text-align: left;
+      font-family: 'EquipCondensed Black', sans-serif; 
+      display: inline-block; 
+      margin-bottom: 0;
+    }
+
+    .input-box {
+      width: 314px;
+      height: 25px;
+    }
+
+    .input-text {
+      width: 282px;
+      height: 24px;
+    }
+
+    .invalid-details {
+      color: red;
+      font-size: 14px;
+    }
+
+    /* Styles for the popup */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: black; /* Set background color to black */
+      color: white;
+      padding: 40px;
+      border: 10px solid white; /* Soft corners */
+      z-index: 999;
+      display: none;
+    }
+
+    /* Close button style */
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Button inside popup */
+    .popup-button {
+      background-color: red;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin-top: 20px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <div class="form-group">
+        <div class="sign-in-text">Sign In</div>
+      </div>
+      <div class="form-group">
+        <input type="text" class="input-box" placeholder="Enter your mobile number" id="mobileNumber">
+      </div>
+      <div class="form-group">
+        <input type="password" class="input-box" placeholder="Enter your password" id="password">
+        <button id="togglePasswordVisibility" onclick="togglePasswordVisibility('password')">&#128065;</button>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Sign In" id="signInButton">
+      </div>
+      <div class="invalid-details" id="invalidDetails"></div>
+    </div>
+  </div>
+
+
+  <!-- Popup -->
+  <div class="popup" id="popup">
+    <span class="close" id="closePopup">&times;</span>
+    <p>Enjoy your TV shows<br>Thank you for choosing Netflix<br> Reminder! This is a Clone Website </p>
+    <a href="netflixxxx.html" class="popup-button">Okay</a>
+  </div>
+
+  <script>
+    document.getElementById("signInButton").addEventListener("click", function() {
+    var mobileNumber = document.getElementById("mobileNumber").value;
+    var password = document.getElementById("password").value;
+
+    // Validate if fields are empty
+    if (mobileNumber === '' || password === '') {
+        document.getElementById("invalidDetails").innerText = "Details are invalid";
+    } else if (mobileNumber.length !== 10) { // Validate if mobile number is not 10 digits
+        document.getElementById("invalidDetails").innerText = "Mobile number must be 10 digits";
+    } else {
+        // Check password validation rules
+        var passwordErrors = validatePassword(password);
+
+        if (passwordErrors.length > 0) {
+            // Display individual error messages
+            document.getElementById("invalidDetails").innerText = passwordErrors.join("\n");
+        } else {
+            // Show popup
+            document.getElementById("popup").style.display = "block";
+        }
+    }
+});
+
+
+// Function to validate password
+function validatePassword(password) {
+    var errors = [];
+
+    // Password should contain minimum 8 characters
+    if (password.length < 8) {
+        errors.push("Password must be at least 8 characters long.");
+    }
+
+    // Password should contain at least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+        errors.push("Password must include at least 1 uppercase letter.");
+    }
+
+    // Password should contain at least one number
+    if (!/\d/.test(password)) {
+        errors.push("Password must include at least 1 number.");
+    }
+
+    // Password should contain at least one symbol
+    if (!/[!@#$%^&*()_+}{"':;?/|><.~`]/.test(password)) {
+        errors.push("Password must include at least 1 symbol.");
+    }
+
+    return errors;
+}
+function togglePasswordVisibility(inputId) {
+      var inputField = document.getElementById(inputId);
+      var toggleButton = document.getElementById("togglePasswordVisibility");
+
+      if (inputField.type === "password") {
+        inputField.type = "text";
+        toggleButton.innerHTML = "&#128274;"; // Lock emoji
+      } else {
+        inputField.type = "password";
+        toggleButton.innerHTML = "&#128065;"; // Eye emoji
+      }
+    }
+// Close popup when close button is clicked
+document.getElementById("closePopup").addEventListener("click", function() {
+    document.getElementById("popup").style.display = "none";
+});
+
+  </script>
+</body>
+</html>

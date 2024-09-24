@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix India – Watch TV Shows Online, Watch Movies Online</title>
+    <style>
+        body {
+            background-color: black;
+            color: black;
+        }
+
+        .payment-options-box {
+            background-color: white;
+            text-decoration-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: auto;
+            width: 50%;
+        }
+
+        .payment-options-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .payment-option-details input {
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+
+        .popup p {
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .popup button {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none; /* Initially hiding the error message */
+        }
+    </style>
+</head>
+
+<body>
+    <section id="step3" class="signup-step">
+        <h6>STEP 3 OF 3</h6>
+        <h2>Choose your Payment Option</h2>
+        <div class="payment-options-container">
+            <div class="payment-options-box">
+                <div id="paymentOptions" class="payment-options hide">
+                    <h3>Choose One</h3>
+                    <!-- Payment Options Radio Buttons -->
+                    <input type="radio" id="upiOption" name="paymentOption" value="upi">
+                    <label for="upiOption">UPI ID</label><br>
+
+                    <input type="radio" id="cardOption" name="paymentOption" value="card">
+                    <label for="cardOption">Debit/Credit Card</label><br>
+
+                    <!-- UPI Details -->
+                    <br>
+                    <div id="upiDetails" class="payment-option-details hide">
+                        <label for="upiId">UPI ID</label>
+                        <input type="text" id="upiId" placeholder="Enter UPI@ID">
+                        <p id="upiErrorMessage" class="error-message">UPI must be in the Format 'mydigitalmoney@upi'and Atleast 10 characters </p>
+                    </div>
+
+                    <!-- Card Details -->
+                    <div id="cardDetails" class="payment-option-details hide">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="Enter Card Number"><br>
+                        <label for="cardHolderName">Card Holder Name</label>
+                        <input type="text" id="cardHolderName" placeholder="Enter Card Holder Name">
+                        <p id="cardErrorMessage" class="error-message">Card number must be 16 digits </p>
+                        <p id="cardHolderErrorMessage" class="error-message">Card holder name must be Atleast 5 characters</p>
+                    </div><br>
+
+                    <!-- Complete Payment Button -->
+                    <button class="complete-payment-btn" id="completePaymentBtn">Complete Payment</button>
+                    <p id="errorMessage" class="error-message">Invalid details</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Success Popup -->
+    <div class="popup" id="paymentSuccessPopup">
+        <p>Yay! Your payment process is complete.Now you can watch movies on Netflix. Thank you for choosing Netflix.</p>
+        <a href="netflixxxx.html" class="popup-button">Okay</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    // Function to handle Complete Payment button click
+    document.getElementById("completePaymentBtn").addEventListener("click", function() {
+        // Validate input fields based on selected option
+        var paymentOption = document.querySelector('input[name="paymentOption"]:checked').value;
+
+        if (paymentOption === 'upi') {
+            var upiId = document.getElementById('upiId').value.trim();
+            // Validate UPI ID format
+            if (!/^[\w.-]+@[\w.-]+$/.test(upiId)) {
+                // Display error message if UPI ID format is invalid
+                document.getElementById('upiErrorMessage').style.display = 'block';
+                return; // Exit function
+            }
+        } else if (paymentOption === 'card') {
+            var cardNumber = document.getElementById('cardNumber').value.trim();
+            var cardHolderName = document.getElementById('cardHolderName').value.trim();
+            
+            // Remove spaces from card number input
+            cardNumber = cardNumber.replace(/\s/g, '');
+
+            // Validate card number format
+            if (!/^\d{16}$/.test(cardNumber)) {
+                // Display error message if card number format is invalid
+                document.getElementById('cardErrorMessage').style.display = 'block';
+                return; // Exit function
+            }
+
+            // Insert spaces between every four digits
+            var formattedCardNumber = cardNumber.match(/.{1,4}/g).join(' ');
+            document.getElementById('cardNumber').value = formattedCardNumber;
+
+            // Validate card holder name format
+            if (!/^[A-Za-z ]{5,}$/.test(cardHolderName)) {
+                // Display error message if card holder name format is invalid
+                document.getElementById('cardHolderErrorMessage').style.display = 'block';
+                return; // Exit function
+            }
+        }
+    
+
+
+        // Assuming validation is successful
+        // Hide payment options
+        document.getElementById('paymentOptions').style.display = 'none';
+        // Hide error messages if displayed
+        document.querySelectorAll('.error-message').forEach(function(errorMsg) {
+            errorMsg.style.display = 'none';
+        });
+        // Show popup
+        document.getElementById('paymentSuccessPopup').style.display = 'block';
+    });
+
+    // Function to show/hide input fields based on selected payment option
+    document.querySelectorAll('input[name="paymentOption"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            var paymentOption = this.value;
+            if (paymentOption === 'upi') {
+                document.getElementById('upiDetails').style.display = 'block';
+                document.getElementById('cardDetails').style.display = 'none';
+            } else if (paymentOption === 'card') {
+                document.getElementById('upiDetails').style.display = 'none';
+                document.getElementById('cardDetails').style.display = 'block';
+            }
+            // Hide error messages
+            document.querySelectorAll('.error-message').forEach(function(errorMsg) {
+                errorMsg.style.display = 'none';
+            });
+        });
+    });
+});
+
+    </script>
+</body>
+
+</html>

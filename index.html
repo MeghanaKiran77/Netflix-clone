@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grades</title>
+    <script>
+        function calculateGrade() {
+            var name = document.getElementById('name').value;
+            var subjects = ['subject1', 'subject2', 'subject3', 'subject4', 'subject5'];
+            var total = 0;
+
+            subjects.forEach(function(subject) {
+                total += parseFloat(document.getElementById(subject).value);
+            });
+
+            var average = total / subjects.length;
+            var grade;
+
+            if (average >= 90) {
+                grade = 'A';
+            } else if (average >= 80) {
+                grade = 'B';
+            } else if (average >= 70) {
+                grade = 'C';
+            } else if (average >= 60) {
+                grade = 'D';
+            } else {
+                grade = 'F';
+            }
+
+            document.getElementById('output').innerText = `Name: ${name}, Grade: ${grade}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Student Grade Calculator</h1>
+    <form onsubmit="calculateGrade(); return false;">
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+        <br>
+        <label for="subject1">Subject 1</label>
+        <input type="number" id="subject1" required>
+        <br>
+        <label for="subject2">Subject 2</label>
+        <input type="number" id="subject2" required>
+        <br>
+        <label for="subject3">Subject 3</label>
+        <input type="number" id="subject3" required>
+        <br>
+        <label for="subject4">Subject 4</label>
+        <input type="number" id="subject4" required>
+        <br>
+        <label for="subject5">Subject 5</label>
+        <input type="number" id="subject5" required>
+        <br>
+        <input type="submit" value="Calculate Grade">
+    </form>
+    <p id="output"></p>
+</body>
+</html>
